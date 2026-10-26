@@ -1,186 +1,155 @@
-\# UTS Manajemen Basis Data
 
+<div align="center">
 
+# 📚 UTS Manajemen Basis Data
 
-\## Identitas Mahasiswa
+### Implementasi Database Menggunakan Docker dan PostgreSQL
 
-\- Nama: Devi Aliyanti
+**Devi Aliyanti · 1247050029**
 
-\- NIM: 1247050029
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![pgAdmin](https://img.shields.io/badge/pgAdmin-4-3D70AE?style=for-the-badge)
 
-\- Mata Kuliah: Manajemen Basis Data
+</div>
 
+---
 
+## 📌 Deskripsi Proyek
 
-\## Deskripsi Proyek
+Repository ini berisi proyek Ujian Tengah Semester (UTS) mata kuliah **Manajemen Basis Data**. Proyek ini menerapkan penggunaan Docker untuk menjalankan PostgreSQL dan pgAdmin, pengelolaan database melalui DBeaver, pembuatan schema dan tabel, serta pengaturan hak akses pengguna.
 
-Proyek ini dibuat untuk memenuhi tugas UTS Manajemen Basis Data dengan menggunakan Docker, PostgreSQL, dan pgAdmin.
+## 👤 Identitas Mahasiswa
 
+| Informasi | Keterangan |
+|:---|:---|
+| Nama | Devi Aliyanti |
+| NIM | 1247050029 |
+| Mata Kuliah | Manajemen Basis Data |
 
+## 🛠️ Teknologi
 
-Proyek ini mencakup pembuatan container database PostgreSQL, pengelolaan database melalui pgAdmin dan DBeaver, pembuatan schema dan tabel, serta pengaturan hak akses pengguna database.
+| Teknologi | Fungsi |
+|:---|:---|
+| Docker | Menjalankan layanan dalam container |
+| Docker Compose | Mengatur layanan PostgreSQL dan pgAdmin |
+| PostgreSQL 15 | Sistem manajemen basis data |
+| pgAdmin 4 | Mengelola PostgreSQL melalui antarmuka web |
+| DBeaver | Mengakses dan menjalankan query SQL |
 
-
-
-\## Teknologi yang Digunakan
-
-\- Docker
-
-\- Docker Compose
-
-\- PostgreSQL 15
-
-\- pgAdmin 4
-
-\- DBeaver
-
-\- SQL
-
-
-
-\## Struktur Folder
+## 📂 Struktur Repository
 
 ```text
-
 UTS MDB Devi Aliyanti/
-
 ├── docker-compose.yml
-
-├── .env
-
 ├── .env.example
-
 ├── .gitignore
-
 ├── README.md
-
 └── sql/
-
-&#x20;   ├── 01\_schema\_tabel.sql
-
-&#x20;   └── 02\_role\_hak\_akses.sql
-
+    ├── 01_schema_tabel.sql
+    └── 02_role_hak_akses.sql
 ```
 
+## 🗄️ Konfigurasi Database
 
+| Komponen | Konfigurasi |
+|:---|:---|
+| Database | `kelas_a` |
+| Container PostgreSQL | `postgres_depi` |
+| Port PostgreSQL | `22029` |
+| Container pgAdmin | `pgadmin_depi` |
+| Port pgAdmin | `44029` |
+| Schema | `SALAM` |
+| Tabel | `mahasiswas` |
 
-\## Konfigurasi Database
+## 📋 Implementasi Database
 
-\- Database: kelas\_a
+### 1. Pembuatan Schema dan Tabel
 
-\- Container PostgreSQL: postgres\_depi
+Schema `SALAM` digunakan untuk menyimpan tabel `mahasiswas` dengan constraint berikut:
 
-\- Port PostgreSQL: 22029
+- `PRIMARY KEY` untuk menjamin keunikan NIM.
+- `UNIQUE` untuk mencegah email duplikat.
+- `NOT NULL` untuk kolom yang wajib diisi.
+- `CHECK` untuk membatasi semester antara 1–14.
+- `CHECK` untuk membatasi IPK antara 0–4.
 
-\- Container pgAdmin: pgadmin\_depi
+### 2. Pengaturan Hak Akses
 
-\- Port pgAdmin: 44029
+| Role | Hak Akses |
+|:---|:---|
+| `backend_dev` | SELECT, INSERT, UPDATE, DELETE |
+| `bi_dev` | SELECT |
+| `data_engineer` | CRUD dan pembuatan objek sesuai hak akses serta kepemilikan |
 
+## 🚀 Cara Menjalankan Proyek
 
+### Prasyarat
 
-Konfigurasi rahasia disimpan dalam file `.env` lokal dan tidak disertakan dalam repository GitHub.
+- Docker Desktop sudah terinstal dan berjalan.
+- File konfigurasi `.env` sudah disiapkan secara lokal.
 
+### Menjalankan Container
 
+Jalankan perintah berikut dari terminal pada folder proyek:
 
-\## Schema dan Tabel
+```bash
+docker compose up -d
+```
 
-Schema yang digunakan adalah `SALAM` dengan tabel `mahasiswas`.
+Periksa status container:
 
+```bash
+docker compose ps
+```
 
+### Mengakses Layanan
 
-Tabel tersebut memiliki beberapa constraint:
+**pgAdmin**
 
-\- PRIMARY KEY pada kolom NIM.
+Buka alamat berikut di browser:
 
-\- UNIQUE pada kolom email.
+[http://localhost:44029](http://localhost:44029)
 
-\- NOT NULL pada kolom yang wajib diisi.
+Untuk koneksi PostgreSQL dari pgAdmin dalam jaringan Docker yang sama, gunakan hostname `postgres_depi` dan port `5432`.
 
-\- CHECK untuk membatasi semester antara 1–14.
+**DBeaver**
 
-\- CHECK untuk membatasi IPK antara 0–4.
+Gunakan konfigurasi koneksi berikut:
 
+- Host: `localhost`
+- Port: `22029`
+- Database: `kelas_a`
+- Username: sesuai konfigurasi PostgreSQL
 
+## ▶️ Menjalankan Script SQL
 
-\## Hak Akses Pengguna
+Jalankan script pada database `kelas_a` menggunakan akun admin PostgreSQL secara berurutan:
 
-Terdapat tiga role database:
+1. `sql/01_schema_tabel.sql`
+2. `sql/02_role_hak_akses.sql`
 
-\- `backend\_dev`: hak akses CRUD (SELECT, INSERT, UPDATE, DELETE).
+> **Catatan:** Jika role sudah pernah dibuat sebelumnya, sesuaikan script agar tidak terjadi error akibat duplikasi role.
 
-\- `bi\_dev`: hak akses membaca data menggunakan SELECT.
+## 🔐 Keamanan
 
-\- `data\_engineer`: hak akses CRUD serta membuat objek pada schema sesuai hak kepemilikannya.
+- File `.env` berisi konfigurasi rahasia dan tidak boleh diunggah ke repository.
+- File `.env.example` disediakan sebagai contoh konfigurasi.
+- Jangan menyimpan kata sandi asli atau informasi rahasia di repository publik.
 
+## 📎 File Proyek
 
+- [`docker-compose.yml`](docker-compose.yml) — konfigurasi layanan Docker.
+- [`.env.example`](.env.example) — contoh variabel lingkungan.
+- [`01_schema_tabel.sql`](sql/01_schema_tabel.sql) — pembuatan schema, tabel, dan data.
+- [`02_role_hak_akses.sql`](sql/02_role_hak_akses.sql) — konfigurasi role dan hak akses.
 
-\## Cara Menjalankan Proyek
+---
 
-1\. Pastikan Docker Desktop sudah berjalan.
+<div align="center">
 
-2\. Siapkan file `.env` berdasarkan contoh dalam `.env.example`.
+**UTS Manajemen Basis Data**
 
-3\. Jalankan terminal pada folder proyek.
+Dibuat oleh **Devi Aliyanti**
 
-4\. Jalankan perintah:
-
-
-
-&#x20;  ```bash
-
-&#x20;  docker compose up -d
-
-&#x20;  ```
-
-
-
-5\. Akses pgAdmin melalui:
-
-
-
-&#x20;  ```text
-
-&#x20;  http://localhost:44029
-
-&#x20;  ```
-
-
-
-6\. Hubungkan pgAdmin ke PostgreSQL menggunakan hostname container `postgres\_depi` dan port `5432` jika keduanya berada pada jaringan Docker yang sama.
-
-7\. Gunakan DBeaver untuk menghubungkan PostgreSQL melalui `localhost` dengan port `22029`.
-
-
-
-\## Menjalankan Script SQL
-
-Jalankan script berikut secara berurutan menggunakan akun admin PostgreSQL pada database `kelas\_a`:
-
-
-
-1\. `sql/01\_schema\_tabel.sql`
-
-2\. `sql/02\_role\_hak\_akses.sql`
-
-
-
-Pastikan role belum dibuat sebelumnya agar tidak terjadi error duplikasi role.
-
-
-
-\## Keamanan
-
-\- File `.env` tidak boleh diunggah ke repository publik.
-
-\- File `.env.example` digunakan sebagai contoh konfigurasi tanpa membagikan kata sandi asli.
-
-\- Kata sandi pada script SQL dapat diganti sesuai kebutuhan.
-
-
-
-\## Penutup
-
-Proyek ini menjadi penerapan penggunaan Docker dan PostgreSQL untuk pengelolaan database, pembuatan tabel dengan constraint, serta pengaturan hak akses pengguna.
-
-
-
+</div>
